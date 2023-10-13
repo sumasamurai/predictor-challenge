@@ -1,5 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
+import { ethers } from "hardhat";
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -21,9 +22,11 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
+  const initialMinBetAmount = ethers.utils.parseEther("0.1");
+
   await deploy("PredictorGame", {
     from: deployer,
-    // args: [deployer],
+    args: [initialMinBetAmount],
     log: true,
     autoMine: true,
   });
