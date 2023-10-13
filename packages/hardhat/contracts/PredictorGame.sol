@@ -4,16 +4,21 @@ pragma solidity >=0.8.0 <0.9.0;
 import "hardhat/console.sol";
 
 contract PredictorGame {
-	address public immutable owner;
+    address public immutable owner;
 
-	constructor() {
-		owner = msg.sender;
-	}
+    uint256 public currentEpoch;
+    uint256 public minBetAmount;
 
-	modifier isOwner() {
-		require(msg.sender == owner, "Not the Owner");
-		_;
-	}
+    constructor(uint256 initialBetAmount) {
+        currentEpoch = 1;
+		minBetAmount = initialBetAmount;
+        owner = msg.sender;
+    }
 
-	receive() external payable {}
+    modifier isOwner() {
+        require(msg.sender == owner, "Not the Owner");
+        _;
+    }
+
+    receive() external payable {}
 }
