@@ -44,6 +44,7 @@ contract PredictorGame {
 	}
 
 	mapping(uint256 => Round) public rounds;
+	mapping(address => uint256[]) public userRounds;
 
 	constructor() {
 		currentEpoch = 1;
