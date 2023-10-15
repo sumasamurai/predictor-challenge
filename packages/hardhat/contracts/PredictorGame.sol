@@ -28,7 +28,9 @@ contract PredictorGame {
 	address public immutable owner;
 
 	uint256 public currentEpoch;
-	uint256 public minBetAmount;
+
+	uint256 private minBet = 0.001 ether;
+    uint256 private maxBet = 0.101 ether;
 
 	struct Round {
 		uint256 epoch;
@@ -55,4 +57,24 @@ contract PredictorGame {
 		require(msg.sender == owner, "Not the Owner");
 		_;
 	}
+
+	// Function to update the minimum bet amount.
+    function setMinBet(uint256 newMinBet) public isOwner {
+        require(newMinBet > 0, "Minimum bet must be greater than zero");
+        minBet = newMinBet;
+    }
+
+    // Function to update the maximum bet amount.
+    function setMaxBet(uint256 newMaxBet) public isOwner {
+        require(newMaxBet >= minBet, "Maximum bet must be greater than or equal to minimum bet");
+        maxBet = newMaxBet;
+    }
+
+	// Function to get the values of minBet and maxBet as an array
+    function getBetLimits() public view returns (uint256[2] memory) {
+        uint256[2] memory limits;
+        limits[0] = minBet;
+        limits[1] = maxBet;
+        return limits;
+    }
 }
