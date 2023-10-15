@@ -45,9 +45,8 @@ contract PredictorGame {
 
 	mapping(uint256 => Round) public rounds;
 
-	constructor(uint256 initialBetAmount) {
+	constructor() {
 		currentEpoch = 1;
-		minBetAmount = initialBetAmount;
 		owner = msg.sender;
 	}
 
