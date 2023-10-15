@@ -93,9 +93,9 @@ contract PredictorGame {
 		round.longAmount = round.longAmount + amount;
 
 		// Update user data
-		PlayInfo storage playInfo = ledger[epoch][msg.sender];
-		playInfo.position = Position.Long;
-		playInfo.amount = amount;
+		UserRound storage userRound = ledger[epoch][msg.sender];
+		userRound.position = Position.Long;
+		userRound.amount = amount;
 		userRounds[msg.sender].push(epoch);
 
 		emit PlayLong(msg.sender, epoch, amount);
@@ -114,9 +114,9 @@ contract PredictorGame {
 		round.shortAmount = round.shortAmount + amount;
 
 		// Update user data
-		PlayInfo storage playInfo = ledger[epoch][msg.sender];
-		playInfo.position = Position.Short;
-		playInfo.amount = amount;
+		UserRound storage userRound = ledger[epoch][msg.sender];
+		userRound.position = Position.Short;
+		userRound.amount = amount;
 		userRounds[msg.sender].push(epoch);
 
 		emit PlayShort(msg.sender, epoch, amount);
