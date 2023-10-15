@@ -45,7 +45,14 @@ contract PredictorGame {
 		uint256 closeTimestamp;
 	}
 
+	struct UserRound {
+		Position position;
+		uint256 amount;
+		bool claimed;
+	}
+
 	mapping(uint256 => Round) public rounds;
+	mapping(uint256 => mapping(address => UserRound)) public ledger;
 	mapping(address => uint256[]) public userRounds;
 
 	constructor() {
