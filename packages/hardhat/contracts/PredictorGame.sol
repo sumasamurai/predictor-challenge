@@ -50,6 +50,9 @@ contract PredictorGame {
 		owner = msg.sender;
 	}
 
+	event StartRound(uint256 indexed epoch);
+	event CloseRound(uint256 indexed epoch, int256 price);
+
 	receive() external payable {}
 
 	modifier isOwner() {
@@ -76,4 +79,25 @@ contract PredictorGame {
         limits[1] = maxBet;
         return limits;
     }
+
+	function _startRound(uint256 epoch) private {
+		Round storage round = rounds[epoch];
+		round.startTimestamp = block.timestamp;
+		round.closeTimestamp = block.timestamp + 5 minutes;
+		round.epoch = epoch;
+		round.totalAmount = 0;
+
+		emit StartRound(epoch);
+	}
+
+	function _closeRound(uint256 epoch, int256 price) private {
+		require(rounds[epoch].closeTimestamp != 0, "Round not started");
+		require(block.timestamp >= rounds[epoch].closeTimestamp, "Round cannot be closed yet");
+
+		Round storage round = rounds[epoch];
+		round.closePrice = price;
+
+		emit CloseRound(epoch, round.closePrice);
+	}
+
 }
