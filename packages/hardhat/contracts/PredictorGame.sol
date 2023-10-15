@@ -21,10 +21,12 @@
 
 // we wont need below line once we finish so will clean once we have the mvp
 import "hardhat/console.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 pragma solidity >=0.8.0 <0.9.0;
 
 contract PredictorGame {
+	using SafeMath for uint256;
 	address public immutable owner;
 
 	uint256 public currentEpoch;
@@ -51,6 +53,7 @@ contract PredictorGame {
 
 	mapping(uint256 => Round) public rounds;
 	mapping(uint256 => mapping(address => UserRound)) public ledger;
+	mapping(address => uint256[]) public userRounds;
 
 	constructor() {
 		currentEpoch = 1;
@@ -83,4 +86,13 @@ contract PredictorGame {
         limits[1] = maxBet;
         return limits;
     }
+
+    function _isRoundPlayable(uint256 epoch) private view returns (bool) {
+        return
+            rounds[epoch].startTimestamp != 0 &&
+            rounds[epoch].closeTimestamp != 0 &&
+            block.timestamp > rounds[epoch].startTimestamp &&
+            block.timestamp < rounds[epoch].closeTimestamp;
+    }
+
 }
