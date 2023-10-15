@@ -50,6 +50,9 @@ contract PredictorGame {
 		owner = msg.sender;
 	}
 
+	event PlayLong(address indexed sender, uint256 indexed epoch, uint256 amount);
+	event PlayShort(address indexed sender, uint256 indexed epoch, uint256 amount);
+
 	receive() external payable {}
 
 	modifier isOwner() {
@@ -76,4 +79,47 @@ contract PredictorGame {
         limits[1] = maxBet;
         return limits;
     }
+
+	function playLong(uint256 epoch) external payable {
+		require(epoch == currentEpoch, "Play is too early/late");
+		require(_playable(epoch), "Round not playable");
+		require(msg.value >= minPlayAmount, "Play amount must be greater than minPlayAmount");
+		require(ledger[epoch][msg.sender].amount == 0, "Can only play once per round");
+
+		// Update round data
+		uint256 amount = msg.value;
+		Round storage round = rounds[epoch];
+		round.totalAmount = round.totalAmount + amount;
+		round.longAmount = round.longAmount + amount;
+
+		// Update user data
+		PlayInfo storage playInfo = ledger[epoch][msg.sender];
+		playInfo.position = Position.Long;
+		playInfo.amount = amount;
+		userRounds[msg.sender].push(epoch);
+
+		emit PlayLong(msg.sender, epoch, amount);
+	}
+
+	function playShort(uint256 epoch) external payable {
+		require(epoch == currentEpoch, "Play is too early/late");
+		require(_playable(epoch), "Round not playable");
+		require(msg.value >= minPlayAmount, "Play amount must be greater than minPlayAmount");
+		require(ledger[epoch][msg.sender].amount == 0, "Can only play once per round");
+
+		// Update round data
+		uint256 amount = msg.value;
+		Round storage round = rounds[epoch];
+		round.totalAmount = round.totalAmount + amount;
+		round.shortAmount = round.shortAmount + amount;
+
+		// Update user data
+		PlayInfo storage playInfo = ledger[epoch][msg.sender];
+		playInfo.position = Position.Short;
+		playInfo.amount = amount;
+		userRounds[msg.sender].push(epoch);
+
+		emit PlayShort(msg.sender, epoch, amount);
+	}
+
 }
