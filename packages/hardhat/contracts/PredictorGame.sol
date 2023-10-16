@@ -108,19 +108,14 @@ contract PredictorGame {
         minBet = newMinBet;
     }
 
-    // Function to update the maximum bet amount.
-    function setMaxBet(uint256 newMaxBet) public isOwner {
-        require(newMaxBet >= minBet, "Maximum bet must be greater than or equal to minimum bet");
-        maxBet = newMaxBet;
-    }
-
-    // Function to get the values of minBet and maxBet as an array
-    function getBetLimits() public view returns (uint256[2] memory) {
-        uint256[2] memory limits;
-        limits[0] = minBet;
-        limits[1] = maxBet;
-        return limits;
-    }
+	// Function to update the maximum bet amount.
+	function setMaxBet(uint256 newMaxBet) public isOwner {
+		require(
+			newMaxBet >= minBet,
+			"Maximum bet must be greater than or equal to minimum bet"
+		);
+		maxBet = newMaxBet;
+	}
 
     /**
      * INTERNAL AND PRIVATE FUNCTIONS
@@ -161,5 +156,13 @@ contract PredictorGame {
         uint256 ethPrice = uint256(answer * 1e10); // ETH/USD rate in 18 digits
         uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18; // the actual ETH/USD conversion rate, after adjusting the extra 0s.
         return ethAmountInUsd;
+    }
+    
+    // Function to get the values of minBet and maxBet as an array
+    function getBetLimits() public view returns (uint256[2] memory) {
+        uint256[2] memory limits;
+        limits[0] = minBet;
+        limits[1] = maxBet;
+        return limits;
     }
 }
