@@ -5,7 +5,7 @@ const contracts = {
       name: "localhost",
       contracts: {
         MockV3Aggregator: {
-          address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+          address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
           abi: [
             {
               inputs: [
@@ -305,7 +305,7 @@ const contracts = {
           ],
         },
         PredictorGame: {
-          address: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+          address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
           abi: [
             {
               inputs: [
@@ -335,6 +335,56 @@ const contracts = {
                 },
               ],
               name: "CloseRound",
+              type: "event",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "sender",
+                  type: "address",
+                },
+                {
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "amount",
+                  type: "uint256",
+                },
+              ],
+              name: "PlayLong",
+              type: "event",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "sender",
+                  type: "address",
+                },
+                {
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "amount",
+                  type: "uint256",
+                },
+              ],
+              name: "PlayShort",
               type: "event",
             },
             {
@@ -440,6 +490,32 @@ const contracts = {
                 },
               ],
               stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
+                },
+              ],
+              name: "playLong",
+              outputs: [],
+              stateMutability: "payable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
+                },
+              ],
+              name: "playShort",
+              outputs: [],
+              stateMutability: "payable",
               type: "function",
             },
             {

@@ -76,6 +76,8 @@ contract PredictorGame {
 
     event StartRound(uint256 indexed epoch);
     event CloseRound(uint256 indexed epoch, int256 price);
+	event PlayLong(address indexed sender, uint256 indexed epoch, uint256 amount);
+	event PlayShort(address indexed sender, uint256 indexed epoch, uint256 amount);
 
     /**
      * MODIFIERS
@@ -157,7 +159,7 @@ contract PredictorGame {
         uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18; // the actual ETH/USD conversion rate, after adjusting the extra 0s.
         return ethAmountInUsd;
     }
-    
+
     // Function to get the values of minBet and maxBet as an array
     function getBetLimits() public view returns (uint256[2] memory) {
         uint256[2] memory limits;
@@ -165,4 +167,47 @@ contract PredictorGame {
         limits[1] = maxBet;
         return limits;
     }
+
+	function playLong(uint256 epoch) external payable {
+		require(epoch == currentEpoch, "Play is too early/late");
+		require(_isRoundPlayable(epoch), "Round not playable");
+		require(msg.value >= minBet, "Play amount must be greater than minBet");
+		require(ledger[epoch][msg.sender].amount == 0, "Can only play once per round");
+
+		// Update round data
+		uint256 amount = msg.value;
+		Round storage round = rounds[epoch];
+		round.totalAmount = round.totalAmount + amount;
+		round.longAmount = round.longAmount + amount;
+
+		// Update user data
+		UserRound storage userRound = ledger[epoch][msg.sender];
+		userRound.position = Position.LONG;
+		userRound.amount = amount;
+		userRounds[msg.sender].push(epoch);
+
+		emit PlayLong(msg.sender, epoch, amount);
+	}
+
+	function playShort(uint256 epoch) external payable {
+		require(epoch == currentEpoch, "Play is too early/late");
+		require(_isRoundPlayable(epoch), "Round not playable");
+		require(msg.value >= minBet, "Play amount must be greater than minBet");
+		require(ledger[epoch][msg.sender].amount == 0, "Can only play once per round");
+
+		// Update round data
+		uint256 amount = msg.value;
+		Round storage round = rounds[epoch];
+		round.totalAmount = round.totalAmount + amount;
+		round.shortAmount = round.shortAmount + amount;
+
+		// Update user data
+		UserRound storage userRound = ledger[epoch][msg.sender];
+		userRound.position = Position.SHORT;
+		userRound.amount = amount;
+		userRounds[msg.sender].push(epoch);
+
+		emit PlayShort(msg.sender, epoch, amount);
+	}
+    
 }
