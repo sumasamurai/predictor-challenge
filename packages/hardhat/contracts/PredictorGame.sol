@@ -152,18 +152,14 @@ contract PredictorGame {
     }
 
     /**
-     * @dev Functions to get ETH price in USD from Chainlink Price Feeds
+     * VIEW AND PURE FUNCTIONS
      */
-    function _getPrice() internal view returns (uint256) {
-        (, int256 answer,,,) = priceFeed.latestRoundData();
-        // ETH/USD rate in 18 digit
-        return uint256(answer * 1e10);
-    }
 
+    // Get the latest price for the ethAmount of ETH in USD
     function getLatestPrice(uint256 ethAmount) public view returns (uint256) {
-        uint256 ethPrice = _getPrice();
-        uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18; // 1 * 10 ** 18 == 1000000000000000000
-        // the actual ETH/USD conversion rate, after adjusting the extra 0s.
+        (, int256 answer,,,) = priceFeed.latestRoundData();
+        uint256 ethPrice = uint256(answer * 1e10); // ETH/USD rate in 18 digits
+        uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18; // the actual ETH/USD conversion rate, after adjusting the extra 0s.
         return ethAmountInUsd;
     }
 }

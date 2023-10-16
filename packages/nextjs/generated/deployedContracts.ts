@@ -305,7 +305,7 @@ const contracts = {
           ],
         },
         PredictorGame: {
-          address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+          address: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
           abi: [
             {
               inputs: [
@@ -351,25 +351,6 @@ const contracts = {
               type: "event",
             },
             {
-              inputs: [
-                {
-                  internalType: "uint256",
-                  name: "ethAmount",
-                  type: "uint256",
-                },
-              ],
-              name: "_getConversionRate",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
               inputs: [],
               name: "currentEpoch",
               outputs: [
@@ -390,6 +371,25 @@ const contracts = {
                   internalType: "uint256[2]",
                   name: "",
                   type: "uint256[2]",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "ethAmount",
+                  type: "uint256",
+                },
+              ],
+              name: "getLatestPrice",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
                 },
               ],
               stateMutability: "view",
