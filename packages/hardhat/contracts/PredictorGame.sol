@@ -32,7 +32,7 @@ contract PredictorGame {
 	uint256 public currentEpoch;
 
 	uint256 private minBet = 0.001 ether;
-    uint256 private maxBet = 0.101 ether;
+	uint256 private maxBet = 0.101 ether;
 
 	struct Round {
 		uint256 epoch;
@@ -43,6 +43,11 @@ contract PredictorGame {
 		uint256 rewardAmount;
 		uint256 startTimestamp;
 		uint256 closeTimestamp;
+	}
+
+	enum Position {
+	    Long,
+	    Short
 	}
 
 	struct UserRound {
@@ -71,25 +76,27 @@ contract PredictorGame {
 	}
 
 	// Function to update the minimum bet amount.
-    function setMinBet(uint256 newMinBet) public isOwner {
-        require(newMinBet > 0, "Minimum bet must be greater than zero");
-        minBet = newMinBet;
-    }
+	function setMinBet(uint256 newMinBet) public isOwner {
+		require(newMinBet > 0, "Minimum bet must be greater than zero");
+		minBet = newMinBet;
+	}
 
-    // Function to update the maximum bet amount.
-    function setMaxBet(uint256 newMaxBet) public isOwner {
-        require(newMaxBet >= minBet, "Maximum bet must be greater than or equal to minimum bet");
-        maxBet = newMaxBet;
-    }
+	// Function to update the maximum bet amount.
+	function setMaxBet(uint256 newMaxBet) public isOwner {
+		require(
+			newMaxBet >= minBet,
+			"Maximum bet must be greater than or equal to minimum bet"
+		);
+		maxBet = newMaxBet;
+	}
 
 	// Function to get the values of minBet and maxBet as an array
-    function getBetLimits() public view returns (uint256[2] memory) {
-        uint256[2] memory limits;
-        limits[0] = minBet;
-        limits[1] = maxBet;
-        return limits;
-    }
-
+	function getBetLimits() public view returns (uint256[2] memory) {
+		uint256[2] memory limits;
+		limits[0] = minBet;
+		limits[1] = maxBet;
+		return limits;
+	}
 
 	function _startRound(uint256 epoch) private {
 		Round storage round = rounds[epoch];
@@ -103,7 +110,10 @@ contract PredictorGame {
 
 	function _closeRound(uint256 epoch, int256 price) private {
 		require(rounds[epoch].closeTimestamp != 0, "Round not started");
-		require(block.timestamp >= rounds[epoch].closeTimestamp, "Round cannot be closed yet");
+		require(
+			block.timestamp >= rounds[epoch].closeTimestamp,
+			"Round cannot be closed yet"
+		);
 
 		Round storage round = rounds[epoch];
 		round.closePrice = price;
@@ -111,11 +121,11 @@ contract PredictorGame {
 		emit CloseRound(epoch, round.closePrice);
 	}
 
-    function _isRoundPlayable(uint256 epoch) private view returns (bool) {
-        return
-            rounds[epoch].startTimestamp != 0 &&
-            rounds[epoch].closeTimestamp != 0 &&
-            block.timestamp > rounds[epoch].startTimestamp &&
-            block.timestamp < rounds[epoch].closeTimestamp;
-    }
+	function _isRoundPlayable(uint256 epoch) private view returns (bool) {
+		return
+			rounds[epoch].startTimestamp != 0 &&
+			rounds[epoch].closeTimestamp != 0 &&
+			block.timestamp > rounds[epoch].startTimestamp &&
+			block.timestamp < rounds[epoch].closeTimestamp;
+	}
 }
