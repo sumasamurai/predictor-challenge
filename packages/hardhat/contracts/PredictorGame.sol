@@ -45,8 +45,9 @@ contract PredictorGame {
 		uint256 closeTimestamp;
 	}
 
-	struct Position {
-		uint256 positionId;
+	enum Position {
+	    Long,
+	    Short
 	}
 
 	struct UserRound {
