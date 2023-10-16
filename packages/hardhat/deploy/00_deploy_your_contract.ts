@@ -22,11 +22,9 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  const initialMinBetAmount = ethers.utils.parseEther("0.1");
-
   await deploy("PredictorGame", {
     from: deployer,
-    args: [initialMinBetAmount],
+    // args: [],
     log: true,
     autoMine: true,
   });
