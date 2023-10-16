@@ -4,13 +4,370 @@ const contracts = {
       chainId: "31337",
       name: "localhost",
       contracts: {
-        PredictorGame: {
-          address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+        MockV3Aggregator: {
+          address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
           abi: [
             {
-              inputs: [],
+              inputs: [
+                {
+                  internalType: "uint8",
+                  name: "_decimals",
+                  type: "uint8",
+                },
+                {
+                  internalType: "int256",
+                  name: "_initialAnswer",
+                  type: "int256",
+                },
+              ],
               stateMutability: "nonpayable",
               type: "constructor",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "int256",
+                  name: "current",
+                  type: "int256",
+                },
+                {
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "roundId",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "updatedAt",
+                  type: "uint256",
+                },
+              ],
+              name: "AnswerUpdated",
+              type: "event",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "roundId",
+                  type: "uint256",
+                },
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "startedBy",
+                  type: "address",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "startedAt",
+                  type: "uint256",
+                },
+              ],
+              name: "NewRound",
+              type: "event",
+            },
+            {
+              inputs: [],
+              name: "decimals",
+              outputs: [
+                {
+                  internalType: "uint8",
+                  name: "",
+                  type: "uint8",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "description",
+              outputs: [
+                {
+                  internalType: "string",
+                  name: "",
+                  type: "string",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              name: "getAnswer",
+              outputs: [
+                {
+                  internalType: "int256",
+                  name: "",
+                  type: "int256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint80",
+                  name: "_roundId",
+                  type: "uint80",
+                },
+              ],
+              name: "getRoundData",
+              outputs: [
+                {
+                  internalType: "uint80",
+                  name: "roundId",
+                  type: "uint80",
+                },
+                {
+                  internalType: "int256",
+                  name: "answer",
+                  type: "int256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "startedAt",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "updatedAt",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint80",
+                  name: "answeredInRound",
+                  type: "uint80",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              name: "getTimestamp",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "latestAnswer",
+              outputs: [
+                {
+                  internalType: "int256",
+                  name: "",
+                  type: "int256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "latestRound",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "latestRoundData",
+              outputs: [
+                {
+                  internalType: "uint80",
+                  name: "roundId",
+                  type: "uint80",
+                },
+                {
+                  internalType: "int256",
+                  name: "answer",
+                  type: "int256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "startedAt",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "updatedAt",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint80",
+                  name: "answeredInRound",
+                  type: "uint80",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "latestTimestamp",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "int256",
+                  name: "_answer",
+                  type: "int256",
+                },
+              ],
+              name: "updateAnswer",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint80",
+                  name: "_roundId",
+                  type: "uint80",
+                },
+                {
+                  internalType: "int256",
+                  name: "_answer",
+                  type: "int256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "_timestamp",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "_startedAt",
+                  type: "uint256",
+                },
+              ],
+              name: "updateRoundData",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "version",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+          ],
+        },
+        PredictorGame: {
+          address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+          abi: [
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_priceFeed",
+                  type: "address",
+                },
+              ],
+              stateMutability: "nonpayable",
+              type: "constructor",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "int256",
+                  name: "price",
+                  type: "int256",
+                },
+              ],
+              name: "CloseRound",
+              type: "event",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
+                },
+              ],
+              name: "StartRound",
+              type: "event",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "ethAmount",
+                  type: "uint256",
+                },
+              ],
+              name: "_getConversionRate",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
             },
             {
               inputs: [],
@@ -39,11 +396,58 @@ const contracts = {
               type: "function",
             },
             {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              name: "ledger",
+              outputs: [
+                {
+                  internalType: "enum Position",
+                  name: "position",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint256",
+                  name: "amount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bool",
+                  name: "claimed",
+                  type: "bool",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
               inputs: [],
               name: "owner",
               outputs: [
                 {
                   internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "priceFeed",
+              outputs: [
+                {
+                  internalType: "contract AggregatorV3Interface",
                   name: "",
                   type: "address",
                 },
@@ -129,6 +533,30 @@ const contracts = {
               name: "setMinBet",
               outputs: [],
               stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              name: "userRounds",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
               type: "function",
             },
             {
