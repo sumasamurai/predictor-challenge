@@ -143,6 +143,12 @@ contract PredictorGame {
         emit CloseRound(epoch, round.closePrice);
     }
 
+    function manageRound() external {
+        _closeRound(currentEpoch, 200000000000);
+        currentEpoch++;
+        _startRound(currentEpoch);
+    }
+
     function _isRoundPlayable(uint256 epoch) private view returns (bool) {
         return rounds[epoch].startTimestamp != 0 && rounds[epoch].closeTimestamp != 0
             && block.timestamp > rounds[epoch].startTimestamp && block.timestamp < rounds[epoch].closeTimestamp;

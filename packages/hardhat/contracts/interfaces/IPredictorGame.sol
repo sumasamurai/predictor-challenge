@@ -57,4 +57,9 @@ interface IPredictorGame {
 	 * @dev This function allows the player to playShort on PredictorGame, which takes epoch as an argument
 	 */
 	function playShort(uint256 epoch) external;
+	
+	/**
+	* It should include the necessary logic to handle various aspects of the round.
+	*/
+	function manageRound() external;
 }
