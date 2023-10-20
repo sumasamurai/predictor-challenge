@@ -62,7 +62,6 @@ export const Slider = () => {
                 setSlides(mutableSlides);
             }
         }
-
     }, [isLoading, error]);
 
     useScaffoldEventSubscriber({

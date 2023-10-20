@@ -78,8 +78,8 @@ contract PredictorGame {
 
     event StartRound(uint256 indexed epoch, uint256 openPrice);
     event CloseRound(uint256 indexed epoch, uint256 openPrice, uint256 closePrice, uint256 longAmount, uint256 shortAmount);
-	event PlayLong(address indexed sender, uint256 indexed epoch, uint256 amount, Position position);
-	event PlayShort(address indexed sender, uint256 indexed epoch, uint256 amount, Position position);
+    event PlayLong(address indexed sender, uint256 indexed epoch, uint256 amount, Position position);
+    event PlayShort(address indexed sender, uint256 indexed epoch, uint256 amount, Position position);
 
     /**
      * MODIFIERS
@@ -116,14 +116,14 @@ contract PredictorGame {
         minBet = newMinBet;
     }
 
-	// Function to update the maximum bet amount.
-	function setMaxBet(uint256 newMaxBet) public isOwner {
-		require(
-			newMaxBet >= minBet,
-			"Maximum bet must be greater than or equal to minimum bet"
-		);
-		maxBet = newMaxBet;
-	}
+    // Function to update the maximum bet amount.
+    function setMaxBet(uint256 newMaxBet) public isOwner {
+        require(
+            newMaxBet >= minBet,
+            "Maximum bet must be greater than or equal to minimum bet"
+        );
+        maxBet = newMaxBet;
+    }
 
     function setAdmin(address _admin) public isOwner {
         admin = _admin;
@@ -191,45 +191,45 @@ contract PredictorGame {
         return limits;
     }
 
-	function playLong() public payable {
-		require(_isRoundPlayable(currentEpoch), "Round not playable");
-		require(msg.value >= minBet, "Play amount must be greater than minBet");
-		require(ledger[currentEpoch][msg.sender].amount == 0, "Can only play once per round");
+    function playLong() public payable {
+        require(_isRoundPlayable(currentEpoch), "Round not playable");
+        require(msg.value >= minBet, "Play amount must be greater than minBet");
+        require(ledger[currentEpoch][msg.sender].amount == 0, "Can only play once per round");
 
-		// Update round data
-		uint256 amount = msg.value;
-		Round storage round = rounds[currentEpoch];
-		round.totalAmount = round.totalAmount + amount;
-		round.longAmount = round.longAmount + amount;
+        // Update round data
+        uint256 amount = msg.value;
+        Round storage round = rounds[currentEpoch];
+        round.totalAmount = round.totalAmount + amount;
+        round.longAmount = round.longAmount + amount;
 
-		// Update user data
-		UserRound storage userRound = ledger[currentEpoch][msg.sender];
-		userRound.position = Position.LONG;
-		userRound.amount = amount;
-		userRounds[msg.sender].push(currentEpoch);
+        // Update user data
+        UserRound storage userRound = ledger[currentEpoch][msg.sender];
+        userRound.position = Position.LONG;
+        userRound.amount = amount;
+        userRounds[msg.sender].push(currentEpoch);
 
-		emit PlayLong(msg.sender, currentEpoch, amount, userRound.position);
-	}
+        emit PlayLong(msg.sender, currentEpoch, amount, userRound.position);
+    }
 
-	function playShort() public payable {
-		require(_isRoundPlayable(currentEpoch), "Round not playable");
-		require(msg.value >= minBet, "Play amount must be greater than minBet");
-		require(ledger[currentEpoch][msg.sender].amount == 0, "Can only play once per round");
+    function playShort() public payable {
+        require(_isRoundPlayable(currentEpoch), "Round not playable");
+        require(msg.value >= minBet, "Play amount must be greater than minBet");
+        require(ledger[currentEpoch][msg.sender].amount == 0, "Can only play once per round");
 
-		// Update round data
-		uint256 amount = msg.value;
-		Round storage round = rounds[currentEpoch];
-		round.totalAmount = round.totalAmount + amount;
-		round.shortAmount = round.shortAmount + amount;
+        // Update round data
+        uint256 amount = msg.value;
+        Round storage round = rounds[currentEpoch];
+        round.totalAmount = round.totalAmount + amount;
+        round.shortAmount = round.shortAmount + amount;
 
-		// Update user data
-		UserRound storage userRound = ledger[currentEpoch][msg.sender];
-		userRound.position = Position.SHORT;
-		userRound.amount = amount;
-		userRounds[msg.sender].push(currentEpoch);
+        // Update user data
+        UserRound storage userRound = ledger[currentEpoch][msg.sender];
+        userRound.position = Position.SHORT;
+        userRound.amount = amount;
+        userRounds[msg.sender].push(currentEpoch);
 
-		emit PlayShort(msg.sender, currentEpoch, amount, userRound.position);
-	}
+        emit PlayShort(msg.sender, currentEpoch, amount, userRound.position);
+    }
 
     receive() external payable {}
 }
