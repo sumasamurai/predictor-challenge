@@ -402,19 +402,6 @@ const contracts = {
             },
             {
               inputs: [],
-              name: "currentEpoch",
-              outputs: [
-                {
-                  internalType: "uint256",
-                  name: "",
-                  type: "uint256",
-                },
-              ],
-              stateMutability: "view",
-              type: "function",
-            },
-            {
-              inputs: [],
               name: "getBetLimits",
               outputs: [
                 {
@@ -481,6 +468,13 @@ const contracts = {
             },
             {
               inputs: [],
+              name: "manageRound",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [],
               name: "owner",
               outputs: [
                 {
@@ -493,26 +487,14 @@ const contracts = {
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "uint256",
-                  name: "epoch",
-                  type: "uint256",
-                },
-              ],
+              inputs: [],
               name: "playLong",
               outputs: [],
               stateMutability: "payable",
               type: "function",
             },
             {
-              inputs: [
-                {
-                  internalType: "uint256",
-                  name: "epoch",
-                  type: "uint256",
-                },
-              ],
+              inputs: [],
               name: "playShort",
               outputs: [],
               stateMutability: "payable",
@@ -583,6 +565,400 @@ const contracts = {
                 },
               ],
               stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_admin",
+                  type: "address",
+                },
+              ],
+              name: "setAdmin",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "newMaxBet",
+                  type: "uint256",
+                },
+              ],
+              name: "setMaxBet",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "newMinBet",
+                  type: "uint256",
+                },
+              ],
+              name: "setMinBet",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              name: "userRounds",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              stateMutability: "payable",
+              type: "receive",
+            },
+          ],
+        },
+      },
+    },
+  ],
+  11155111: [
+    {
+      chainId: "11155111",
+      name: "sepolia",
+      contracts: {
+        PredictorGame: {
+          address: "0x186CC8B9206AE85dBD800d06Fe06Bc5943B824ed",
+          abi: [
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_priceFeed",
+                  type: "address",
+                },
+              ],
+              stateMutability: "nonpayable",
+              type: "constructor",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "openPrice",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "closePrice",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "longAmount",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "shortAmount",
+                  type: "uint256",
+                },
+              ],
+              name: "CloseRound",
+              type: "event",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "sender",
+                  type: "address",
+                },
+                {
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "amount",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "enum Position",
+                  name: "position",
+                  type: "uint8",
+                },
+              ],
+              name: "PlayLong",
+              type: "event",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "address",
+                  name: "sender",
+                  type: "address",
+                },
+                {
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "amount",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "enum Position",
+                  name: "position",
+                  type: "uint8",
+                },
+              ],
+              name: "PlayShort",
+              type: "event",
+            },
+            {
+              anonymous: false,
+              inputs: [
+                {
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
+                },
+                {
+                  indexed: false,
+                  internalType: "uint256",
+                  name: "openPrice",
+                  type: "uint256",
+                },
+              ],
+              name: "StartRound",
+              type: "event",
+            },
+            {
+              inputs: [],
+              name: "getBetLimits",
+              outputs: [
+                {
+                  internalType: "uint256[2]",
+                  name: "",
+                  type: "uint256[2]",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "ethAmount",
+                  type: "uint256",
+                },
+              ],
+              name: "getLatestPrice",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              name: "ledger",
+              outputs: [
+                {
+                  internalType: "enum Position",
+                  name: "position",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint256",
+                  name: "amount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bool",
+                  name: "claimed",
+                  type: "bool",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "manageRound",
+              outputs: [],
+              stateMutability: "nonpayable",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "owner",
+              outputs: [
+                {
+                  internalType: "address",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "playLong",
+              outputs: [],
+              stateMutability: "payable",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "playShort",
+              outputs: [],
+              stateMutability: "payable",
+              type: "function",
+            },
+            {
+              inputs: [],
+              name: "priceFeed",
+              outputs: [
+                {
+                  internalType: "contract AggregatorV3Interface",
+                  name: "",
+                  type: "address",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "",
+                  type: "uint256",
+                },
+              ],
+              name: "rounds",
+              outputs: [
+                {
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "openPrice",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "closePrice",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "longAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "shortAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "totalAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "rewardAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "startTimestamp",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "closeTimestamp",
+                  type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "address",
+                  name: "_admin",
+                  type: "address",
+                },
+              ],
+              name: "setAdmin",
+              outputs: [],
+              stateMutability: "nonpayable",
               type: "function",
             },
             {
