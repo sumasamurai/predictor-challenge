@@ -39,7 +39,8 @@ enum Position {
 
 struct Round {
     uint256 epoch;
-    int256 closePrice;
+    uint256 openPrice;
+    uint256 closePrice;
     uint256 longAmount;
     uint256 shortAmount;
     uint256 totalAmount;
@@ -63,7 +64,8 @@ contract PredictorGame {
     uint256 private maxBet = 0.101 ether;
 
     address public immutable owner;
-    uint256 public currentEpoch;
+    address private admin;
+    uint256 private currentEpoch;
     AggregatorV3Interface public priceFeed;
 
     mapping(uint256 => Round) public rounds;
@@ -74,10 +76,10 @@ contract PredictorGame {
      * EVENTS
      */
 
-    event StartRound(uint256 indexed epoch);
-    event CloseRound(uint256 indexed epoch, int256 price);
-	event PlayLong(address indexed sender, uint256 indexed epoch, uint256 amount);
-	event PlayShort(address indexed sender, uint256 indexed epoch, uint256 amount);
+    event StartRound(uint256 indexed epoch, uint256 openPrice);
+    event CloseRound(uint256 indexed epoch, uint256 openPrice, uint256 closePrice, uint256 longAmount, uint256 shortAmount);
+    event PlayLong(address indexed sender, uint256 indexed epoch, uint256 amount, Position position);
+    event PlayShort(address indexed sender, uint256 indexed epoch, uint256 amount, Position position);
 
     /**
      * MODIFIERS
@@ -85,6 +87,11 @@ contract PredictorGame {
 
     modifier isOwner() {
         require(msg.sender == owner, "Not the Owner");
+        _;
+    }
+
+    modifier isAdmin() {
+        require(msg.sender == admin, "Not the Admin");
         _;
     }
 
@@ -96,9 +103,8 @@ contract PredictorGame {
         priceFeed = AggregatorV3Interface(_priceFeed);
         currentEpoch = 1;
         owner = msg.sender;
+        _startRound();
     }
-
-    receive() external payable {}
 
     /**
      * PUBLIC FUNCTIONS
@@ -110,37 +116,49 @@ contract PredictorGame {
         minBet = newMinBet;
     }
 
-	// Function to update the maximum bet amount.
-	function setMaxBet(uint256 newMaxBet) public isOwner {
-		require(
-			newMaxBet >= minBet,
-			"Maximum bet must be greater than or equal to minimum bet"
-		);
-		maxBet = newMaxBet;
-	}
+    // Function to update the maximum bet amount.
+    function setMaxBet(uint256 newMaxBet) public isOwner {
+        require(
+            newMaxBet >= minBet,
+            "Maximum bet must be greater than or equal to minimum bet"
+        );
+        maxBet = newMaxBet;
+    }
+
+    function setAdmin(address _admin) public isOwner {
+        admin = _admin;
+    }
 
     /**
      * INTERNAL AND PRIVATE FUNCTIONS
      */
 
-    function _startRound(uint256 epoch) private {
-        Round storage round = rounds[epoch];
+    function _startRound() private {
+        Round storage round = rounds[currentEpoch];
         round.startTimestamp = block.timestamp;
         round.closeTimestamp = block.timestamp + 5 minutes;
-        round.epoch = epoch;
-        // round.totalAmount = 0; // already set to 0
+        round.epoch = currentEpoch;
+        uint256 latestPrice = getLatestPrice(1);
+        round.openPrice = latestPrice;
 
-        emit StartRound(epoch);
+        emit StartRound(currentEpoch, latestPrice);
     }
 
-    function _closeRound(uint256 epoch, int256 price) private {
-        require(rounds[epoch].closeTimestamp != 0, "Round not started");
-        require(block.timestamp >= rounds[epoch].closeTimestamp, "Round cannot be closed yet");
+    function _closeRound() private {
+        require(rounds[currentEpoch].closeTimestamp != 0, "Round not started");
+        require(block.timestamp >= rounds[currentEpoch].closeTimestamp, "Round cannot be closed yet");
+ 
+        Round storage round = rounds[currentEpoch];
+        uint256 latestPrice = getLatestPrice(1);
+        round.closePrice = latestPrice;
 
-        Round storage round = rounds[epoch];
-        round.closePrice = price;
+        emit CloseRound(currentEpoch, round.openPrice, round.closePrice, round.longAmount, round.shortAmount);
+    }
 
-        emit CloseRound(epoch, round.closePrice);
+    function manageRound() public isAdmin {
+        _closeRound();
+        currentEpoch = currentEpoch + 1;
+        _startRound();
     }
 
     function _isRoundPlayable(uint256 epoch) private view returns (bool) {
@@ -155,8 +173,13 @@ contract PredictorGame {
     // Get the latest price for the ethAmount of ETH in USD
     function getLatestPrice(uint256 ethAmount) public view returns (uint256) {
         (, int256 answer,,,) = priceFeed.latestRoundData();
-        uint256 ethPrice = uint256(answer * 1e10); // ETH/USD rate in 18 digits
-        uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18; // the actual ETH/USD conversion rate, after adjusting the extra 0s.
+        int256 ethPrice = int256(answer); // ETH/USD rate with decimal places
+
+        // Use the appropriate scale factor based on the number of decimal places (18 for most Chainlink price feeds)
+        uint256 scaleFactor = 10**18;
+
+        // Convert with decimal places
+        uint256 ethAmountInUsd = (uint256(ethPrice) * ethAmount * scaleFactor) / uint256(1e8); // Convert from 8 decimal places to 18 decimal places
         return ethAmountInUsd;
     }
 
@@ -168,46 +191,45 @@ contract PredictorGame {
         return limits;
     }
 
-	function playLong(uint256 epoch) external payable {
-		require(epoch == currentEpoch, "Play is too early/late");
-		require(_isRoundPlayable(epoch), "Round not playable");
-		require(msg.value >= minBet, "Play amount must be greater than minBet");
-		require(ledger[epoch][msg.sender].amount == 0, "Can only play once per round");
+    function playLong() public payable {
+        require(_isRoundPlayable(currentEpoch), "Round not playable");
+        require(msg.value >= minBet, "Play amount must be greater than minBet");
+        require(ledger[currentEpoch][msg.sender].amount == 0, "Can only play once per round");
 
-		// Update round data
-		uint256 amount = msg.value;
-		Round storage round = rounds[epoch];
-		round.totalAmount = round.totalAmount + amount;
-		round.longAmount = round.longAmount + amount;
+        // Update round data
+        uint256 amount = msg.value;
+        Round storage round = rounds[currentEpoch];
+        round.totalAmount = round.totalAmount + amount;
+        round.longAmount = round.longAmount + amount;
 
-		// Update user data
-		UserRound storage userRound = ledger[epoch][msg.sender];
-		userRound.position = Position.LONG;
-		userRound.amount = amount;
-		userRounds[msg.sender].push(epoch);
+        // Update user data
+        UserRound storage userRound = ledger[currentEpoch][msg.sender];
+        userRound.position = Position.LONG;
+        userRound.amount = amount;
+        userRounds[msg.sender].push(currentEpoch);
 
-		emit PlayLong(msg.sender, epoch, amount);
-	}
+        emit PlayLong(msg.sender, currentEpoch, amount, userRound.position);
+    }
 
-	function playShort(uint256 epoch) external payable {
-		require(epoch == currentEpoch, "Play is too early/late");
-		require(_isRoundPlayable(epoch), "Round not playable");
-		require(msg.value >= minBet, "Play amount must be greater than minBet");
-		require(ledger[epoch][msg.sender].amount == 0, "Can only play once per round");
+    function playShort() public payable {
+        require(_isRoundPlayable(currentEpoch), "Round not playable");
+        require(msg.value >= minBet, "Play amount must be greater than minBet");
+        require(ledger[currentEpoch][msg.sender].amount == 0, "Can only play once per round");
 
-		// Update round data
-		uint256 amount = msg.value;
-		Round storage round = rounds[epoch];
-		round.totalAmount = round.totalAmount + amount;
-		round.shortAmount = round.shortAmount + amount;
+        // Update round data
+        uint256 amount = msg.value;
+        Round storage round = rounds[currentEpoch];
+        round.totalAmount = round.totalAmount + amount;
+        round.shortAmount = round.shortAmount + amount;
 
-		// Update user data
-		UserRound storage userRound = ledger[epoch][msg.sender];
-		userRound.position = Position.SHORT;
-		userRound.amount = amount;
-		userRounds[msg.sender].push(epoch);
+        // Update user data
+        UserRound storage userRound = ledger[currentEpoch][msg.sender];
+        userRound.position = Position.SHORT;
+        userRound.amount = amount;
+        userRounds[msg.sender].push(currentEpoch);
 
-		emit PlayShort(msg.sender, epoch, amount);
-	}
-    
+        emit PlayShort(msg.sender, currentEpoch, amount, userRound.position);
+    }
+
+    receive() external payable {}
 }
