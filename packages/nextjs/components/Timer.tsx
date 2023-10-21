@@ -25,7 +25,7 @@ export const Timer = ({ unixTimestamp }: { unixTimestamp: number }) => {
   const formattedMinutes: string = minutes.toString().padStart(2, '0');
   const formattedSeconds: string = seconds.toString().padStart(2, '0');
 
-  return (remainingSeconds > 0 &&
+  return (
     <div className='timer'>
       <svg viewBox="0 0 43.99 37.23" className='timer-decor'>
         <g>

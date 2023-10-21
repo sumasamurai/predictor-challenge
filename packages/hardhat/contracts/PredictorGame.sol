@@ -47,6 +47,7 @@ struct Round {
     uint256 rewardAmount;
     uint256 startTimestamp;
     uint256 closeTimestamp;
+    uint256 lockTimestamp;
 }
 
 struct UserRound {
@@ -76,8 +77,9 @@ contract PredictorGame {
      * EVENTS
      */
 
-    event StartRound(uint256 indexed epoch);
-    event CloseRound(uint256 indexed epoch);
+    event StartRound(Round round);
+    event CloseRound(Round round);
+
     event PlayLong(address indexed sender, uint256 indexed epoch, uint256 amount, Position position);
     event PlayShort(address indexed sender, uint256 indexed epoch, uint256 amount, Position position);
 
@@ -101,7 +103,7 @@ contract PredictorGame {
 
     constructor(address _priceFeed) {
         priceFeed = AggregatorV3Interface(_priceFeed);
-        currentEpoch = 2;
+        currentEpoch = 1;
         owner = msg.sender;
         _startRound();
     }
@@ -134,26 +136,29 @@ contract PredictorGame {
      */
 
     function _startRound() private {
-        currentEpoch = currentEpoch + 1;
         Round storage round = rounds[currentEpoch];
-        round.startTimestamp = block.timestamp;
-        round.closeTimestamp = block.timestamp + 5 minutes;
-        round.epoch = currentEpoch;
         uint256 latestPrice = getLatestPrice(1);
         round.openPrice = latestPrice;
 
-        emit StartRound(currentEpoch);
+        currentEpoch = currentEpoch + 1;
+        round = rounds[currentEpoch];
+        round.startTimestamp = block.timestamp;
+        round.closeTimestamp = block.timestamp + 5 minutes;
+        round.lockTimestamp = block.timestamp + 10 minutes;
+        round.epoch = currentEpoch;
+        
+        emit StartRound(round);
     }
 
     function _closeRound() private {
         require(rounds[currentEpoch].closeTimestamp != 0, "Round not started");
         require(block.timestamp >= rounds[currentEpoch].closeTimestamp, "Round cannot be closed yet");
  
-        Round storage round = rounds[currentEpoch];
+        Round storage round = rounds[currentEpoch - 1];
         uint256 latestPrice = getLatestPrice(1);
         round.closePrice = latestPrice;
 
-        emit CloseRound(currentEpoch);
+        emit CloseRound(round);
     }
 
     function manageRound() public isAdmin {
@@ -198,7 +203,7 @@ contract PredictorGame {
 
         // Update round data
         uint256 amount = msg.value;
-        Round storage round = rounds[currentEpoch + 1];
+        Round storage round = rounds[currentEpoch];
         round.totalAmount = round.totalAmount + amount;
         round.longAmount = round.longAmount + amount;
 

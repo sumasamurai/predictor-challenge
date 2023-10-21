@@ -6,14 +6,18 @@ export interface ISlide {
   closePrice: number;
   longAmount: number;
   shortAmount: number;
+  totalAmount: number;
+  rewardAmount: number;
+  startTimestamp: number;
   closeTimestamp: number;
+  lockTimestamp: number;
 }
 
 const calculateRatios = (longAmount: number, shortAmount: number) => {
   let longRatio = .90;
   let shortRatio = .90;
   const totalAmount = longAmount + shortAmount;
-
+  console.log(longAmount, shortAmount);
   if (longAmount > 0) {
     longRatio = totalAmount / longAmount;
   }
@@ -31,7 +35,6 @@ const getWeiToEther = (wei: number): number => {
 
 export const Slide = (props: any) => {
   if (typeof props === "object") {
-    console.log({ props });
     const { longRatio, shortRatio } = calculateRatios(getWeiToEther(props.longAmount), getWeiToEther(props.shortAmount));
 
     return (
@@ -43,7 +46,7 @@ export const Slide = (props: any) => {
               <span className="candlestick-date">Open</span>
               <span className="candlestick-open">{getWeiToEther(props.openPrice)}</span>
             </div>
-            <Timer unixTimestamp={props.closeTimestamp} />
+            <Timer unixTimestamp={props.lockTimestamp} />
             <div className="candlestick-label-close">
               <span className="candlestick-date">Close</span>
               <span className="candlestick-close">{getWeiToEther(props.closePrice)}</span>
