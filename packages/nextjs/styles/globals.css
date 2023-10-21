@@ -30,3 +30,169 @@ p {
 .btn.btn-ghost {
   @apply shadow-none;
 }
+
+.candlestick-epoch-decor {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  stroke: #d4515a;
+  fill: #1abf64;
+}
+
+.candlestick-line {
+  min-height: 300px;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  position: relative;
+}
+
+.candlestick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.candlestick-body {
+  min-width: 150px;
+  box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(50, 64, 98) 0px 4px 6px -1px, rgb(50, 64, 98) 0px 2px 4px -2px;
+}
+
+.candlestick-epoch {
+  position: absolute;
+  top: 0;
+  color: #dceaff;
+  font-size: 0.8rem;
+  letter-spacing: 3px;
+  text-shadow: 0 1px 0 #202537;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.candlestick-label {
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.candlestick-body__long {
+  height: 50%;
+  background: #385081;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  border: 2px solid #1abf64;
+  color: #1abf64;
+  border-bottom: none;
+  text-shadow: 0 1px 0 #202537;
+}
+
+.candlestick-body__short {
+  height: 50%;
+  background: #395081;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  border: 2px solid #d45159;
+  border-top: none;
+  color: #d45159;
+  text-shadow: 0 1px 0 #202537;
+}
+
+.candlestick-wick {
+  height: 50px;
+  width: 3px;
+  position: absolute;
+  background: #2b3758;
+}
+
+.candlestick-wick-top {
+  top: -50px;
+  background: #1abf64;
+}
+
+.candlestick-wick-bottom {
+  bottom: -50px;
+  background: #fa5759d1;
+}
+
+.candlestick-label-open {
+  border-bottom: 1px dashed #000;
+  position: relative;
+  width: 100px;
+}
+
+.candlestick-label-open .candlestick-date {
+  position: absolute;
+  display: block;
+  top: -18px;
+  font-size: 0.8rem;
+  color: #000;
+}
+
+.candlestick-open {
+  position: absolute;
+  color: #000;
+  font-weight: bold;
+  top: 0px;
+  font-size: 0.9rem;
+  text-shadow: 0 1px 0 #bcc6eb24;
+}
+
+.candlestick-label-close {
+  width: 100px;
+  border-bottom: 1px dashed #000;
+  position: relative;
+}
+
+.candlestick-label-close .candlestick-date {
+  font-size: 0.8rem;
+  color: #000;
+  position: absolute;
+  top: -18px;
+}
+
+.candlestick-close {
+  position: absolute;
+  left: 0;
+  top: 22px;
+  color: #000;
+  font-weight: bold;
+  top: 0px;
+  font-size: 0.9rem;
+  text-shadow: 0 1px 0 #bcc6eb24;
+}
+
+.swiper-slide {
+  filter: saturate(0.5);
+}
+
+.swiper-slide.last-slide {
+  filter: none
+}
+
+.timer-decor {
+  stroke: #000000;
+  fill: #d1d1d1;
+  max-width: 26px;
+}
+
+.timer {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: flex-end;
+}
+
+.timer-text {
+  padding-right: 5px;
+}
