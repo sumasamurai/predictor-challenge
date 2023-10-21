@@ -19,16 +19,9 @@ const Home: NextPage = () => {
   const [betAmount, setBetAmount] = useState(".001");
   const [newBetLimits, setNewBetLimits] = useState<string[] | undefined>([]);
 
-  console.log(parseEther(".001"));
-
   const { data: betLimits } = useScaffoldContractRead({
     contractName: "PredictorGame",
     functionName: "getBetLimits",
-  });
-
-  const { data: currentEpoch } = useScaffoldContractRead({
-    contractName: "PredictorGame",
-    functionName: "currentEpoch",
   });
 
   useEffect(() => {
@@ -39,6 +32,24 @@ const Home: NextPage = () => {
       setNewBetLimits([minBetInEther, maxBetInEther]);
     }
   }, [betLimits]);
+
+  const { writeAsync: handlePlayLong } = useScaffoldContractWrite({
+    contractName: "PredictorGame",
+    functionName: "playLong",
+    value: parseEther(betAmount),
+    onBlockConfirmation: txnReceipt => {
+      console.log("Transaction blockHash", txnReceipt.blockHash);
+    },
+  });
+
+  const { writeAsync: handlePlayShort } = useScaffoldContractWrite({
+    contractName: "PredictorGame",
+    functionName: "playShort",
+    value: parseEther(betAmount),
+    onBlockConfirmation: txnReceipt => {
+      console.log("Transaction blockHash", txnReceipt.blockHash);
+    },
+  });
 
   const onPlayLong = async () => {
     try {
@@ -79,26 +90,6 @@ const Home: NextPage = () => {
   const handleInputChange = useCallback((e: any) => {
     return setBetAmount(e);
   }, []);
-
-  const { writeAsync: handlePlayLong } = useScaffoldContractWrite({
-    contractName: "PredictorGame",
-    functionName: "playLong",
-    value: parseEther(betAmount),
-    args: [currentEpoch],
-    onBlockConfirmation: txnReceipt => {
-      console.log("Transaction blockHash", txnReceipt.blockHash);
-    },
-  });
-
-  const { writeAsync: handlePlayShort } = useScaffoldContractWrite({
-    contractName: "PredictorGame",
-    functionName: "playShort",
-    value: parseEther(betAmount),
-    args: [currentEpoch],
-    onBlockConfirmation: txnReceipt => {
-      console.log("Transaction blockHash", txnReceipt.blockHash);
-    },
-  });
 
   return (
     <>

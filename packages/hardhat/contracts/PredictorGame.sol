@@ -76,8 +76,8 @@ contract PredictorGame {
      * EVENTS
      */
 
-    event StartRound(uint256 indexed epoch, uint256 openPrice);
-    event CloseRound(uint256 indexed epoch, uint256 openPrice, uint256 closePrice, uint256 longAmount, uint256 shortAmount);
+    event StartRound(uint256 indexed epoch);
+    event CloseRound(uint256 indexed epoch);
     event PlayLong(address indexed sender, uint256 indexed epoch, uint256 amount, Position position);
     event PlayShort(address indexed sender, uint256 indexed epoch, uint256 amount, Position position);
 
@@ -101,7 +101,7 @@ contract PredictorGame {
 
     constructor(address _priceFeed) {
         priceFeed = AggregatorV3Interface(_priceFeed);
-        currentEpoch = 1;
+        currentEpoch = 2;
         owner = msg.sender;
         _startRound();
     }
@@ -134,6 +134,7 @@ contract PredictorGame {
      */
 
     function _startRound() private {
+        currentEpoch = currentEpoch + 1;
         Round storage round = rounds[currentEpoch];
         round.startTimestamp = block.timestamp;
         round.closeTimestamp = block.timestamp + 5 minutes;
@@ -141,7 +142,7 @@ contract PredictorGame {
         uint256 latestPrice = getLatestPrice(1);
         round.openPrice = latestPrice;
 
-        emit StartRound(currentEpoch, latestPrice);
+        emit StartRound(currentEpoch);
     }
 
     function _closeRound() private {
@@ -152,12 +153,11 @@ contract PredictorGame {
         uint256 latestPrice = getLatestPrice(1);
         round.closePrice = latestPrice;
 
-        emit CloseRound(currentEpoch, round.openPrice, round.closePrice, round.longAmount, round.shortAmount);
+        emit CloseRound(currentEpoch);
     }
 
     function manageRound() public isAdmin {
         _closeRound();
-        currentEpoch = currentEpoch + 1;
         _startRound();
     }
 
@@ -198,7 +198,7 @@ contract PredictorGame {
 
         // Update round data
         uint256 amount = msg.value;
-        Round storage round = rounds[currentEpoch];
+        Round storage round = rounds[currentEpoch + 1];
         round.totalAmount = round.totalAmount + amount;
         round.longAmount = round.longAmount + amount;
 

@@ -19,6 +19,7 @@ export const Slider = () => {
         prevEl: ".swiper-button-prev",
       },
       initialSlide: slides.length - 1,
+      slidesPerView: 2,
     });
   }, [slides]);
 
@@ -28,7 +29,7 @@ export const Slider = () => {
     error: error,
   } = useScaffoldEventHistory({
     contractName: "PredictorGame",
-    eventName: "CloseRound",
+    eventName: "StartRound",
     fromBlock: 31231n,
     blockData: false,
     receiptData: false,
@@ -36,24 +37,24 @@ export const Slider = () => {
 
   useEffect(() => {
     if (!isLoading && !error && events) {
-      const getRounds = events.map(event => event.args).reverse().slice(-3);
+      console.log("useScaffoldEventHistory StartRound");
+      const getRounds = events.map(event => event.args).reverse().slice(-4);
       if (Array.isArray(getRounds)) {
         const mutableSlides = getRounds.map((event) => {
           // Extract properties from the event arguments
           const {
             epoch,
             openPrice,
-            closePrice,
-            longAmount,
-            shortAmount,
+            closeTimestamp
           } = event;
 
           const formattedSlide: ISlide = {
             epoch: Number(epoch),
             openPrice: Number(openPrice),
-            closePrice: Number(closePrice),
-            longAmount: Number(longAmount),
-            shortAmount: Number(shortAmount),
+            closeTimestamp: Number(closeTimestamp),
+            closePrice: 0,
+            longAmount: 0,
+            shortAmount: 0
           };
 
           return formattedSlide;
@@ -69,10 +70,12 @@ export const Slider = () => {
     eventName: "StartRound",
     listener: logs => {
       logs.map(log => {
+        console.log("useScaffoldEventSubscriber StartRound");
         const lastSlide = slides[slides.length - 1];
         const epoch = log.args.epoch !== undefined ? Number(log.args.epoch) : 0;
         const openPrice = typeof lastSlide === "object" ? Number(lastSlide.openPrice) : 0;
-
+        const closeTimestamp = Number(log.args.closeTimestamp);
+        console.log("closeTimestamp", closeTimestamp);
         setSlides(prevSlides => {
           const newSlides = [...prevSlides];
           newSlides.push({
@@ -81,6 +84,7 @@ export const Slider = () => {
             closePrice: 0,
             longAmount: 0,
             shortAmount: 0,
+            closeTimestamp
           });
 
           return newSlides;
@@ -101,7 +105,7 @@ export const Slider = () => {
           longAmount,
           shortAmount,
         } = log.args;
-
+        console.log("useScaffoldEventSubscriber CloseRound");
         setSlides((prevSlides) => {
           const updatedSlides = [...prevSlides];
           if (updatedSlides.length > 0) {
@@ -124,12 +128,13 @@ export const Slider = () => {
   });
 
   return (
-    <div>
-      <div className="swiper w-3/4 h-96">
+      <div className="swiper w-full h-full">
         <div className="swiper-wrapper">
           {slides.map((slide, index) =>
             typeof slide === "object" ? (
-              <Slide key={index} {...slide} />
+              <Slide key={index} className={`${
+                index === Array.from(slides.keys()).length - 1 ? 'last-slide' : ''
+              }`} {...slide} />
             ) : (
               <div key={index}>Incorrect data for this slide.</div>
             )
@@ -139,6 +144,5 @@ export const Slider = () => {
         <div className="swiper-button-prev"></div>
         <div className="swiper-button-next"></div>
       </div>
-    </div>
   );
 };
