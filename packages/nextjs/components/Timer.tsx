@@ -30,7 +30,7 @@ export const Timer = ({ unixTimestamp }: { unixTimestamp: number }) => {
       <svg viewBox="0 0 43.99 37.23" className='timer-decor'>
         <g>
           <g>
-            <path d="M0,2.14,2.14,0l17,17H44v3H19L2.37,37.23.25,35.11,16,19V18Z" />
+            <path d="M0,2.14,2.14,0l17,17H44v3H19L2.37,37.23 .25,35.11 16,19V18Z" />
           </g>
         </g>
       </svg>
@@ -40,5 +40,3 @@ export const Timer = ({ unixTimestamp }: { unixTimestamp: number }) => {
     </div>
   );
 }
-
-export default Timer;

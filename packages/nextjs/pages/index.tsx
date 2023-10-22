@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import type { NextPage } from "next";
-import { TransactionReceipt, parseEther } from "viem";
+import { parseEther } from "viem";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
-import { Slider } from "~~/components/Slider";
 import { EtherInput } from "~~/components/scaffold-eth";
-import { useScaffoldContractRead, useScaffoldContractWrite, useScaffoldEventSubscriber } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { Slider } from "~~/components/Slider";
 
 const getWeiToEther = (wei: bigint): string => {
   const etherValue = Number(wei) / 1e18;
@@ -37,24 +37,17 @@ const Home: NextPage = () => {
     contractName: "PredictorGame",
     functionName: "playLong",
     value: parseEther(betAmount),
-    onBlockConfirmation: txnReceipt => {
-      console.log("Transaction blockHash", txnReceipt.blockHash);
-    },
   });
 
   const { writeAsync: handlePlayShort } = useScaffoldContractWrite({
     contractName: "PredictorGame",
     functionName: "playShort",
     value: parseEther(betAmount),
-    onBlockConfirmation: txnReceipt => {
-      console.log("Transaction blockHash", txnReceipt.blockHash);
-    },
   });
 
   const onPlayLong = async () => {
     try {
       setIsLoading(true);
-      console.log("Handle Play Long");
       handlePlayLong();
       setIsLoading(false);
     } catch (error) {
@@ -66,7 +59,6 @@ const Home: NextPage = () => {
   const onPlayShort = async () => {
     try {
       setIsLoading(true);
-      console.log("Handle Play Short");
       handlePlayShort();
       setIsLoading(false);
     } catch (error) {
@@ -78,7 +70,6 @@ const Home: NextPage = () => {
   const onClaim = async () => {
     try {
       setIsLoading(true);
-      console.log("Handle Claim");
       // handleClaim();
       setIsLoading(false);
     } catch (error) {
@@ -100,7 +91,6 @@ const Home: NextPage = () => {
             <div className="board col-span-4 lg:col-span-3 rounded-3xl px-6 lg:px-8 py-4 light:shadow-lg shadow-base-300">
               <Slider />
             </div>
-
             <div className="panel col-span-4 lg:col-span-1">
               <div className="col-span-1 lg:col-span-2 flex flex-col gap-6 mb-6 space-y-1">
                 <div className="z-10">
@@ -124,7 +114,6 @@ const Home: NextPage = () => {
                                 </div>
                               </button>
                             </div>
-
                             <div className="flex gap-1 gap-1 items-center">
                               <span className="text-base font-light">Max Bet:</span>
                               <button
@@ -147,7 +136,6 @@ const Home: NextPage = () => {
                   </div>
                 </div>
               </div>
-
               <div className="col-span-1 lg:col-span-2 flex flex-col gap-6 mb-6 space-y-1">
                 <div className="z-10">
                   <div className="bg-base-100 rounded-3xl shadow-md shadow-secondary border border-base-300 flex flex-col mt-10 relative">
@@ -177,7 +165,6 @@ const Home: NextPage = () => {
                   </div>
                 </div>
               </div>
-
               <div className="col-span-1 lg:col-span-2 flex flex-col gap-6 space-y-1">
                 <div className="z-10">
                   <div className="bg-base-100 text-center rounded-3xl shadow-md shadow-secondary border border-base-300 flex flex-col mt-10 relative">
@@ -194,7 +181,6 @@ const Home: NextPage = () => {
                           </div>
                         </button>
                       </div>
-
                       <div className=" flex flex-col gap-3 py-5 first:pt-0 last:pb-1">
                         <button
                           onClick={onClaim}

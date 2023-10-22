@@ -5,7 +5,7 @@ const contracts = {
       name: "sepolia",
       contracts: {
         PredictorGame: {
-          address: "0x0619640aB2cb42282D397B0a6E64EC002A00505a",
+          address: "0x9f105389AffD5C04Cd5d245c00BF24bb3918E018",
           abi: [
             {
               inputs: [
@@ -22,62 +22,10 @@ const contracts = {
               anonymous: false,
               inputs: [
                 {
-                  components: [
-                    {
-                      internalType: "uint256",
-                      name: "epoch",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "openPrice",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "closePrice",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "longAmount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "shortAmount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "totalAmount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "rewardAmount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "startTimestamp",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "closeTimestamp",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "lockTimestamp",
-                      type: "uint256",
-                    },
-                  ],
-                  indexed: false,
-                  internalType: "struct Round",
-                  name: "round",
-                  type: "tuple",
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
                 },
               ],
               name: "CloseRound",
@@ -104,12 +52,6 @@ const contracts = {
                   name: "amount",
                   type: "uint256",
                 },
-                {
-                  indexed: false,
-                  internalType: "enum Position",
-                  name: "position",
-                  type: "uint8",
-                },
               ],
               name: "PlayLong",
               type: "event",
@@ -135,12 +77,6 @@ const contracts = {
                   name: "amount",
                   type: "uint256",
                 },
-                {
-                  indexed: false,
-                  internalType: "enum Position",
-                  name: "position",
-                  type: "uint8",
-                },
               ],
               name: "PlayShort",
               type: "event",
@@ -149,62 +85,10 @@ const contracts = {
               anonymous: false,
               inputs: [
                 {
-                  components: [
-                    {
-                      internalType: "uint256",
-                      name: "epoch",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "openPrice",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "closePrice",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "longAmount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "shortAmount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "totalAmount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "rewardAmount",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "startTimestamp",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "closeTimestamp",
-                      type: "uint256",
-                    },
-                    {
-                      internalType: "uint256",
-                      name: "lockTimestamp",
-                      type: "uint256",
-                    },
-                  ],
-                  indexed: false,
-                  internalType: "struct Round",
-                  name: "round",
-                  type: "tuple",
+                  indexed: true,
+                  internalType: "uint256",
+                  name: "epoch",
+                  type: "uint256",
                 },
               ],
               name: "StartRound",
@@ -237,6 +121,148 @@ const contracts = {
                   internalType: "uint256",
                   name: "",
                   type: "uint256",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "numRounds",
+                  type: "uint256",
+                },
+              ],
+              name: "getLatestRounds",
+              outputs: [
+                {
+                  components: [
+                    {
+                      internalType: "uint256",
+                      name: "epoch",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "openPrice",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "closePrice",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "longAmount",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "shortAmount",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "totalAmount",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "rewardAmount",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "startTimestamp",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "closeTimestamp",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "lockTimestamp",
+                      type: "uint256",
+                    },
+                  ],
+                  internalType: "struct Round[]",
+                  name: "",
+                  type: "tuple[]",
+                },
+              ],
+              stateMutability: "view",
+              type: "function",
+            },
+            {
+              inputs: [
+                {
+                  internalType: "uint256",
+                  name: "roundIndex",
+                  type: "uint256",
+                },
+              ],
+              name: "getRoundDataByIndex",
+              outputs: [
+                {
+                  components: [
+                    {
+                      internalType: "uint256",
+                      name: "epoch",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "openPrice",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "closePrice",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "longAmount",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "shortAmount",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "totalAmount",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "rewardAmount",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "startTimestamp",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "closeTimestamp",
+                      type: "uint256",
+                    },
+                    {
+                      internalType: "uint256",
+                      name: "lockTimestamp",
+                      type: "uint256",
+                    },
+                  ],
+                  internalType: "struct Round",
+                  name: "",
+                  type: "tuple",
                 },
               ],
               stateMutability: "view",
