@@ -41,7 +41,7 @@ Stay tuned for exciting developments in the world of Predictor Game!
 - 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
 - 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
 
-![Debug Contracts tab](https://github.com/sumasamurai/predictor-challenge/packages/nextjs/public/assets/screenshot.png)
+![Debug Contracts tab](https://github.com/sumasamurai/predictor-challenge/blob/dcf5d29ce417b47f061b201e994c944fa82311ba/packages/nextjs/public/assets/screenshot.png)
 
 ## Requirements
 
