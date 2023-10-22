@@ -77,11 +77,10 @@ contract PredictorGame {
      * EVENTS
      */
 
-    event StartRound(Round round);
-    event CloseRound(Round round);
-
-    event PlayLong(address indexed sender, uint256 indexed epoch, uint256 amount, Position position);
-    event PlayShort(address indexed sender, uint256 indexed epoch, uint256 amount, Position position);
+    event StartRound(uint256 indexed epoch);
+    event CloseRound(uint256 indexed epoch);
+    event PlayLong(address indexed sender, uint256 indexed epoch, uint256 amount);
+    event PlayShort(address indexed sender, uint256 indexed epoch, uint256 amount);
 
     /**
      * MODIFIERS
@@ -131,34 +130,51 @@ contract PredictorGame {
         admin = _admin;
     }
 
+    function getLatestRounds(uint256 numRounds) public view returns (Round[] memory) {
+        Round[] memory latestRounds = new Round[](numRounds);
+
+        for (uint256 i = 0; i < numRounds; i++) {
+            if (currentEpoch >= i) {
+                latestRounds[i] = rounds[currentEpoch - i];
+            }
+        }
+
+        return latestRounds;
+    }
+
+    function getRoundDataByIndex(uint256 roundIndex) public view returns (Round memory) {
+        return rounds[roundIndex];
+    }
+
     /**
      * INTERNAL AND PRIVATE FUNCTIONS
      */
 
     function _startRound() private {
-        Round storage round = rounds[currentEpoch];
+        Round storage prevRound = rounds[currentEpoch];
         uint256 latestPrice = getLatestPrice(1);
-        round.openPrice = latestPrice;
+        prevRound.openPrice = latestPrice;
 
         currentEpoch = currentEpoch + 1;
-        round = rounds[currentEpoch];
-        round.startTimestamp = block.timestamp;
-        round.closeTimestamp = block.timestamp + 5 minutes;
-        round.lockTimestamp = block.timestamp + 10 minutes;
-        round.epoch = currentEpoch;
-        
-        emit StartRound(round);
+
+        Round storage currentRound = rounds[currentEpoch];
+        currentRound.epoch = currentEpoch;
+        uint256 currentBlock = block.timestamp;
+        currentRound.startTimestamp = currentBlock;
+        currentRound.closeTimestamp = currentBlock + 5 minutes;
+        currentRound.lockTimestamp = currentBlock + 10 minutes;
+
+        emit StartRound(currentEpoch);
     }
 
     function _closeRound() private {
         require(rounds[currentEpoch].closeTimestamp != 0, "Round not started");
-        require(block.timestamp >= rounds[currentEpoch].closeTimestamp, "Round cannot be closed yet");
  
         Round storage round = rounds[currentEpoch - 1];
         uint256 latestPrice = getLatestPrice(1);
         round.closePrice = latestPrice;
 
-        emit CloseRound(round);
+        emit CloseRound(round.epoch);
     }
 
     function manageRound() public isAdmin {
@@ -213,7 +229,7 @@ contract PredictorGame {
         userRound.amount = amount;
         userRounds[msg.sender].push(currentEpoch);
 
-        emit PlayLong(msg.sender, currentEpoch, amount, userRound.position);
+        emit PlayLong(msg.sender, currentEpoch, msg.value);
     }
 
     function playShort() public payable {
@@ -233,7 +249,7 @@ contract PredictorGame {
         userRound.amount = amount;
         userRounds[msg.sender].push(currentEpoch);
 
-        emit PlayShort(msg.sender, currentEpoch, amount, userRound.position);
+        emit PlayShort(msg.sender, currentEpoch, msg.value);
     }
 
     receive() external payable {}

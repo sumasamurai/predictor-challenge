@@ -65,7 +65,8 @@ p {
   position: absolute;
   top: 0;
   color: #dceaff;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
+  font-weight: 300;
   letter-spacing: 3px;
   text-shadow: 0 1px 0 #202537;
   width: 100%;
@@ -74,6 +75,13 @@ p {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+}
+
+.candlestick-epoch-status {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.2px;
+  font-weight: 600;
 }
 
 .candlestick-label {
@@ -177,12 +185,15 @@ p {
   filter: saturate(0.5);
 }
 
-.swiper-slide.last-slide {
+.swiper-slide.next-slide {
   filter: none
 }
-
+.swiper-slide.next-slide .candlestick-label-open,
+.swiper-slide.next-slide .candlestick-label-close {
+  opacity: 0;
+}
 .timer-decor {
-  stroke: #000000;
+  stroke: #202537;
   fill: #d1d1d1;
   max-width: 26px;
 }
@@ -191,8 +202,18 @@ p {
   display: flex;
   flex-direction: row-reverse;
   align-items: flex-end;
+  margin-top: -2px;
 }
 
 .timer-text {
   padding-right: 5px;
+}
+
+.closed-slide:not(.live-slide) {
+  opacity: 0.5;
+  filter: brightness(0.5) grayscale(0.5);
+  box-shadow: none;
+}
+.closed-slide:not(.live-slide) .candlestick-body {
+  box-shadow: none;
 }
