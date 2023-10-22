@@ -1,8 +1,36 @@
 # Predictor Game
 
+Predictor Game is an interactive game that allows users to predict market prices and earn from correct forecasts. The game is built on blockchain technology and utilizes smart contracts to automate processes.
+
+## Key Features
+
+- **Price Prediction:** Players can make predictions about prices of various assets and markets.
+- **Earnings:** Accurate forecasts bring cryptocurrency earnings to players.
+- **Automated Rounds:** We utilize Chainlink for automatically starting new rounds, ensuring stability and non-interference.
+- **Uniswap V4:** We have plans to use Uniswap V4 to create a pool for each round. The pool will automatically grow based on the number of player predictions, providing more earning opportunities.
+
+## Technologies
+
+Predictor Game leverages the following technologies:
+
+- **Blockchain:** For reliability and transaction authenticity.
+- **Smart Contracts:** To automate operations and distribute profits.
+- **Cryptocurrency:** For betting and payout of winnings.
+- **Chainlink:** For the automatic initiation of new rounds and maintaining player trust.
+- **Uniswap V4:** To provide liquidity for each round.
+
+## Roadmap
+
+Our plans include the following innovations:
+
+- **Automated Rounds:** We will continue to enhance automated rounds to ensure players can always participate.
+- **Uniswap V4 Integration:** We will expand our use of Uniswap V4 to create a pool for each round, depending on the number of player predictions.
+
+Stay tuned for exciting developments in the world of Predictor Game!
+
 <h4 align="center">
   <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
+  <a href="https://predictor-challenge.vercel.app">Demo Link</a>
 </h4>
 
 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
@@ -13,7 +41,7 @@
 - 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
 - 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/1171422a-0ce4-4203-bcd4-d2d1941d198b)
+![Debug Contracts tab](https://github.com/sumasamurai/predictor-challenge/packages/nextjs/public/assets/screenshot.png)
 
 ## Requirements
 
@@ -25,13 +53,13 @@ Before you begin, you need to install the following tools:
 
 ## Quickstart
 
-To get started with Scaffold-ETH 2, follow the steps below:
+To get started with Predictor Game, follow the steps below:
 
 1. Clone this repo & install dependencies
 
 ```
-git clone https://github.com/scaffold-eth/scaffold-eth-2.git
-cd scaffold-eth-2
+git clone https://github.com/sumasamurai/predictor-challenge.git
+cd predictor-challenge
 yarn install
 ```
 
@@ -61,7 +89,7 @@ Visit your app on: `http://localhost:3000`. You can interact with your smart con
 
 Run smart contract test with `yarn hardhat:test`
 
-- Edit your smart contract `YourContract.sol` in `packages/hardhat/contracts`
+- Edit smart contract `PredictorGame.sol` in `packages/hardhat/contracts`
 - Edit your frontend in `packages/nextjs/pages`
 - Edit your deployment scripts in `packages/hardhat/deploy`
 
@@ -69,10 +97,5 @@ Run smart contract test with `yarn hardhat:test`
 
 Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
 
-To know more about its features, check out our [website](https://scaffoldeth.io).
 
-## Contributing to Scaffold-ETH 2
 
-We welcome contributions to Scaffold-ETH 2!
-
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
