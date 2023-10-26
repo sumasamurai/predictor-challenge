@@ -16,7 +16,7 @@ const Home: NextPage = () => {
   const { address } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
   const [claimableAmount, setClaimableAmount] = useState(0);
-  const [betAmount, setBetAmount] = useState(".001");
+  const [betAmount, setBetAmount] = useState("0.001");
   const [newBetLimits, setNewBetLimits] = useState<string[] | undefined>([]);
 
   const { data: betLimits } = useScaffoldContractRead({
